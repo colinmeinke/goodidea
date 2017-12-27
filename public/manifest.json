@@ -1,0 +1,10 @@
+{
+  "background_color": "#fff",
+  "description": "Rank your ideas based on your own criteria",
+  "display": "fullscreen",
+  "lang": "en",
+  "name": "Good idea!",
+  "short_name": "Good idea!",
+  "start_url": ".",
+  "theme_color": "#fff"
+}

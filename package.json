@@ -21,6 +21,7 @@
   },
   "description": "Rank your ideas based on your own criteria",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -38,12 +39,14 @@
   "name": "goodidea",
   "scripts": {
     "build": "yarn build:pro",
-    "build:dev": "yarn build:dev:client && yarn build:dev:server",
+    "build:dev": "yarn build:dev:client && yarn build:dev:server && yarn build:dev:sw",
     "build:dev:client": "webpack --config build/client.dev.babel.js",
     "build:dev:server": "webpack --config build/server.dev.babel.js",
-    "build:pro": "yarn build:pro:client && yarn build:pro:server",
+    "build:dev:sw": "NODE_ENV=development babel src/sw.js --out-file public/sw.js",
+    "build:pro": "yarn build:pro:client && yarn build:pro:server && yarn build:dev:sw",
     "build:pro:client": "webpack --config build/client.pro.babel.js",
     "build:pro:server": "webpack --config build/server.pro.babel.js",
+    "build:pro:sw": "NODE_ENV=production babel src/sw.js --out-file public/sw.js",
     "start:dev": "NODE_ENV=development node server.js",
     "start:pro": "NODE_ENV=production node server.js",
     "start": "yarn start:pro"
