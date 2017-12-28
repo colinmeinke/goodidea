@@ -1,5 +1,5 @@
 const cachePrefix = 'goodidea'
-const cacheVersion = 1
+const cacheVersion = __VERSION__
 const currentCacheName = `${cachePrefix}-${cacheVersion}`
 
 self.addEventListener('install', event => {
