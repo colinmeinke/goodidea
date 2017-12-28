@@ -12,14 +12,16 @@ const port = 3000
 const server = express()
 
 const renderer = createRenderer({
-  template: fs.readFileSync('./src/page.html', 'utf-8')
+  template: fs.readFileSync('./dist/page.html', 'utf-8')
 })
 
 if (process.env.NODE_ENV === 'production') {
   server.use(compression())
 }
 
-server.use(express.static('public'))
+server.use(express.static('static', {
+  maxage: process.env.NODE_ENV === 'production' ? '1y' : 0
+}))
 
 server.get('/', (req, res) => {
   const app = new Vue({
@@ -51,10 +53,16 @@ server.get('/', (req, res) => {
   }
 
   renderer.renderToString(app, context).then(html => {
-    res.end(html)
+    res.header('Cache-Control', 'no-cache').end(html)
   }).catch(err => {
     res.status(500).end(err)
   })
+})
+
+server.get('/sw.js', (req, res) => {
+  res
+    .header('Cache-Control', 'no-cache')
+    .sendFile(path.resolve(__dirname, '..', 'dist', 'sw.js'))
 })
 
 server.listen(port, () => {

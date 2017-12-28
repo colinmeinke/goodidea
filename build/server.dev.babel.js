@@ -12,7 +12,7 @@ export default {
   entry: './src/server.js',
   output: {
     filename: 'server.js',
-    path: path.resolve(__dirname, '..')
+    path: path.resolve(__dirname, '..', 'dist')
   },
   externals,
   module: {
@@ -23,5 +23,9 @@ export default {
       }
     ]
   },
-  target: 'node'
+  target: 'node',
+  node: {
+    __dirname: false,
+    __filename: false
+  }
 }

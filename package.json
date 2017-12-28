@@ -27,6 +27,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
+    "bluebird": "^3.5.1",
     "css-loader": "^0.28.7",
     "uglifyjs-webpack-plugin": "^1.1.5",
     "vue": "^2.5.13",
@@ -39,17 +40,20 @@
   "name": "goodidea",
   "scripts": {
     "build": "yarn build:pro",
-    "build:dev": "yarn build:dev:client && yarn build:dev:server && yarn build:dev:sw",
+    "build:dev": "yarn tidy && yarn build:dev:client && yarn build:dev:server && yarn build:dev:sw && yarn build:copy",
     "build:dev:client": "webpack --config build/client.dev.babel.js",
     "build:dev:server": "webpack --config build/server.dev.babel.js",
-    "build:dev:sw": "NODE_ENV=development babel src/sw.js --out-file public/sw.js",
-    "build:pro": "yarn build:pro:client && yarn build:pro:server && yarn build:dev:sw",
+    "build:dev:sw": "NODE_ENV=development babel src/sw.js --out-file dist/sw.js",
+    "build:pro": "yarn tidy && yarn build:pro:client && yarn build:pro:server && yarn build:dev:sw && yarn build:copy && yarn build:cache-bust",
     "build:pro:client": "webpack --config build/client.pro.babel.js",
     "build:pro:server": "webpack --config build/server.pro.babel.js",
-    "build:pro:sw": "NODE_ENV=production babel src/sw.js --out-file public/sw.js",
-    "start:dev": "NODE_ENV=development node server.js",
-    "start:pro": "NODE_ENV=production node server.js",
-    "start": "yarn start:pro"
+    "build:pro:sw": "NODE_ENV=production babel src/sw.js --out-file dist/sw.js",
+    "build:copy": "cp src/manifest.json static/manifest.json && cp src/page.html dist/page.html",
+    "build:cache-bust": "node build/cache-bust.js",
+    "start:dev": "NODE_ENV=development node dist/server.js",
+    "start:pro": "NODE_ENV=production node dist/server.js",
+    "start": "yarn start:pro",
+    "tidy": "rm -rf static dist"
   },
   "version": "0.0.0"
 }

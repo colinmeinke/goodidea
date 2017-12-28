@@ -1,5 +1,4 @@
+/dist
 /node_modules
-/public/client.js
-/public/sw.js
-/server.js
+/static
 /yarn-error.log
