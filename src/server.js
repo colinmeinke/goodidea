@@ -1,10 +1,9 @@
 import compression from 'compression'
+import createApp from './create-app'
 import { createRenderer } from 'vue-server-renderer'
-import editableTitle from './components/editable-title.vue'
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
-import toast from './components/toast.vue'
 import Vue from 'vue'
 
 const port = 3000
@@ -24,27 +23,12 @@ server.use(express.static('static', {
 }))
 
 server.get('/', (req, res) => {
-  const app = new Vue({
-    data: {
-      updateAvailable: false,
-      updateServiceWorker: () => ({})
-    },
-    template: `
-      <div id="app">
-        <editable-title
-          initialMessage="Good idea!"
-        >
-        </editable-title>
-        <toast
-          message="An update is available"
-          action="Update"
-          :actionHandler="updateServiceWorker"
-          v-if="updateAvailable"
-        >
-        </toast>
-      </div>
-    `,
-    components: { editableTitle, toast }
+  const app = createApp({
+    addIdea: () => ({}),
+    deleteIdea: () => ({}),
+    ideas: [],
+    updateAvailable: false,
+    updateServiceWorker: () => ({})
   })
 
   const context = {

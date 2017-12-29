@@ -13,7 +13,7 @@
 
 <script>
   export default {
-    name: 'toast',
+    name: 'Toast',
     props: {
       action: String,
       actionHandler: Function,

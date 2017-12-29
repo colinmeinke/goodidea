@@ -1,30 +1,21 @@
-import editableTitle from './components/editable-title.vue'
-import toast from './components/toast.vue'
-import Vue from 'vue'
+import createApp from './create-app'
 
-const app = new Vue({
-  el: '#app',
-  data: {
-    updateAvailable: false,
-    updateServiceWorker: worker => worker.postMessage({ action: 'skipWaiting' })
+const app = createApp({
+  addIdea: function (idea) {
+    this.$root.ideas.push(idea)
   },
-  template: `
-    <div id="app">
-      <editable-title
-        initialMessage="Good idea!"
-      >
-      </editable-title>
-      <toast
-        message="An update is available"
-        action="Update"
-        :actionHandler="updateServiceWorker"
-        v-if="updateAvailable"
-      >
-      </toast>
-    </div>
-  `,
-  components: { editableTitle, toast }
-})
+  deleteIdea: function (idea) {
+    for (let i = 0, l = this.$root.ideas.length; i < l; i++) {
+      if (idea === this.$root.ideas[ i ]) {
+        this.$root.ideas.splice(i, 1)
+        break
+      }
+    }
+  },
+  ideas: [],
+  updateAvailable: false,
+  updateServiceWorker: worker => worker.postMessage({ action: 'skipWaiting' })
+}, '#app')
 
 if ('serviceWorker' in navigator) {
   const updateReady = worker => {
