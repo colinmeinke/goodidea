@@ -5,26 +5,26 @@
         v-for="(idea, i) in ideas"
         :key="i"
         :idea="idea"
-        :deleteIdea="deleteIdea"
+        :ideaDelete="ideaDelete"
       />
     </IdeaList>
-    <AddIdeaForm :addIdea="addIdea" />
+    <IdeaAddForm :ideaAdd="ideaAdd" />
   </div>
 </template>
 
 <script>
-  import AddIdeaForm from './AddIdeaForm.vue'
+  import IdeaAddForm from './IdeaAddForm.vue'
   import IdeaList from './IdeaList.vue'
   import IdeaOverview from './IdeaOverview.vue'
 
   export default {
     name: 'Home',
     props: {
-      addIdea: {
+      ideaAdd: {
         type: Function,
         required: true
       },
-      deleteIdea: {
+      ideaDelete: {
         type: Function,
         required: true
       },
@@ -33,6 +33,6 @@
         required: true
       }
     },
-    components: { AddIdeaForm, IdeaList, IdeaOverview }
+    components: { IdeaAddForm, IdeaList, IdeaOverview }
   }
 </script>

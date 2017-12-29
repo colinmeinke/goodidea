@@ -6,7 +6,7 @@
       <input
         type="text"
         name="title"
-        ref="addIdeaTitle"
+        ref="ideaAddTitle"
         id="idea-title"
         v-model="title"
         v-on:keyup.prevent="keyupHandler"
@@ -22,14 +22,16 @@
 </template>
 
 <script>
+  import shortid from 'shortid'
+
   export default {
-    name: 'AddIdeaForm',
+    name: 'IdeaAddForm',
     data: () => ({
       title: '',
       disabled: true
     }),
     props: {
-      addIdea: {
+      ideaAdd: {
         type: Function,
         required: true
       }
@@ -45,10 +47,15 @@
           const title = this.title.trim()
 
           if (title.length) {
-            this.addIdea({ title })
+            this.ideaAdd({
+              id: shortid.generate(),
+              created: Date.now(),
+              title
+            })
+
             this.title = ''
             this.keyupHandler()
-            this.$refs.addIdeaTitle.focus()
+            this.$refs.ideaAddTitle.focus()
           }
         }
       }

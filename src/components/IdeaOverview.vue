@@ -11,7 +11,7 @@
   export default {
     name: 'IdeaOverview',
     props: {
-      deleteIdea: {
+      ideaDelete: {
         type: Function,
         required: true
       },
@@ -23,7 +23,7 @@
     computed: {
       clickHandler: function () {
         return function () {
-          this.deleteIdea(this.idea)
+          this.ideaDelete(this.idea)
         }
       }
     }

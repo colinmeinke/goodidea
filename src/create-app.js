@@ -11,8 +11,8 @@ const createApp = (data = {}, el) => {
         :updateServiceWorker="updateServiceWorker"
       >
         <home
-          :addIdea="addIdea"
-          :deleteIdea="deleteIdea"
+          :ideaAdd="ideaAdd"
+          :ideaDelete="ideaDelete"
           :ideas="ideas"
         >
         </home>

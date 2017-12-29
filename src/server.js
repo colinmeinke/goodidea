@@ -24,8 +24,8 @@ server.use(express.static('static', {
 
 server.get('/', (req, res) => {
   const app = createApp({
-    addIdea: () => ({}),
-    deleteIdea: () => ({}),
+    ideaAdd: () => ({}),
+    ideaDelete: () => ({}),
     ideas: [],
     updateAvailable: false,
     updateServiceWorker: () => ({})

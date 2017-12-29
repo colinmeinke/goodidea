@@ -29,6 +29,8 @@
     "babel-register": "^6.26.0",
     "bluebird": "^3.5.1",
     "css-loader": "^0.28.7",
+    "idb": "^2.0.4",
+    "shortid": "^2.2.8",
     "uglifyjs-webpack-plugin": "^1.1.5",
     "vue": "^2.5.13",
     "vue-loader": "^13.6.1",
