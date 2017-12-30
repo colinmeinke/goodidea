@@ -56,7 +56,9 @@ openDb()
         console.error(`Sorry, we failed to fetch the ideas from your browser's local database.`, err)
       })
 
-    initServiceWorker(state)
+    if (!__DEV__) {
+      initServiceWorker(state)
+    }
   })
   .catch(err => {
     console.error(`Sorry, we failed to open your browser's local database.`, err)

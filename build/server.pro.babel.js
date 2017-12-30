@@ -21,6 +21,15 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader'
+      },
+      {
+        test: /\.(js|vue)$/,
+        loader: 'string-replace-loader',
+        query: {
+          search: '__DEV__',
+          replace: 'false',
+          flags: 'g'
+        }
       }
     ]
   },
@@ -35,6 +44,6 @@ module.exports = {
         NODE_ENV: '"production"'
       }
     }),
-    new uglify()
+    new uglify({ compress: { warnings: false } })
   ]
 }

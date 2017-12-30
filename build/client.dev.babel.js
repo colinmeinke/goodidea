@@ -12,6 +12,15 @@ export default {
       {
         test: /\.vue$/,
         loader: 'vue-loader'
+      },
+      {
+        test: /\.(js|vue)$/,
+        loader: 'string-replace-loader',
+        query: {
+          search: '__DEV__',
+          replace: 'true',
+          flags: 'g'
+        }
       }
     ]
   },
