@@ -44,6 +44,6 @@ module.exports = {
         NODE_ENV: '"production"'
       }
     }),
-    new uglify({ compress: { warnings: false } })
+    new uglify()
   ]
 }
