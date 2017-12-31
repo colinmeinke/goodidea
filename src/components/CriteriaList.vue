@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h2>Ideas</h2>
-    <ol>
+    <h2>Criteria</h2>
+    <ul>
       <slot></slot>
-    </ol>
+    </ul>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'IdeaList'
+    name: 'CriteriaList'
   }
 </script>

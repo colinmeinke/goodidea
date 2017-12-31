@@ -16,9 +16,13 @@
 
 <script>
   export default {
-    name: 'IdeasDownload',
+    name: 'DataDownload',
     props: {
       ideas: {
+        type: Array,
+        required: true
+      },
+      criterias: {
         type: Array,
         required: true
       }
@@ -29,7 +33,10 @@
     }),
     methods: {
       download: function () {
-        const ideasJson = JSON.stringify({ ideas: this.ideas })
+        const ideasJson = JSON.stringify({
+          ideas: this.ideas,
+          criterias: this.criterias
+        })
 
         this.file = `data:text/json;charset=utf-8,${encodeURIComponent(ideasJson)}`
         this.fileName = `ideas-${Date.now()}.json`

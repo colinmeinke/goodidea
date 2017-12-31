@@ -8,22 +8,51 @@
         :ideaDelete="ideaDelete"
       />
     </IdeaList>
+
     <IdeaAddForm :ideaAdd="ideaAdd" />
-    <IdeasDownload :ideas="ideas" />
-    <IdeasUpload :ideasUpload="ideasUpload" />
+
+    <CriteriaList>
+      <CriteriaOverview
+        v-for="(criteria, i) in criterias"
+        :key="i"
+        :criteria="criteria"
+        :criteriaDelete="criteriaDelete"
+      />
+    </CriteriaList>
+
+    <CriteriaAddForm :criteriaAdd="criteriaAdd" />
+
+    <DataDownload :ideas="ideas" :criterias="criterias" />
+
+    <DataUpload :upload="upload" />
   </div>
 </template>
 
 <script>
+  import CriteriaAddForm from './CriteriaAddForm.vue'
+  import CriteriaList from './CriteriaList.vue'
+  import CriteriaOverview from './CriteriaOverview.vue'
   import IdeaAddForm from './IdeaAddForm.vue'
   import IdeaList from './IdeaList.vue'
   import IdeaOverview from './IdeaOverview.vue'
-  import IdeasDownload from './IdeasDownload.vue'
-  import IdeasUpload from './IdeasUpload.vue'
+  import DataDownload from './DataDownload.vue'
+  import DataUpload from './DataUpload.vue'
 
   export default {
     name: 'Home',
     props: {
+      criteriaAdd: {
+        type: Function,
+        required: true
+      },
+      criteriaDelete: {
+        type: Function,
+        required: true
+      },
+      criterias: {
+        type: Array,
+        required: true
+      },
       ideaAdd: {
         type: Function,
         required: true
@@ -36,17 +65,20 @@
         type: Array,
         required: true
       },
-      ideasUpload: {
+      upload: {
         type: Function,
         required: true
       }
     },
     components: {
+      CriteriaAddForm,
+      CriteriaList,
+      CriteriaOverview,
       IdeaAddForm,
       IdeaList,
       IdeaOverview,
-      IdeasDownload,
-      IdeasUpload
+      DataDownload,
+      DataUpload
     }
   }
 </script>

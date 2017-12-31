@@ -1,7 +1,8 @@
 <template>
   <li>
-    <h3>{{ idea.title }}</h3>
-    <p v-if="idea.description">{{ idea.description }}</p>
+    <h3>{{ criteria.title }}</h3>
+    <p v-if="criteria.description">{{ criteria.description }}</p>
+    <p>Weight: {{ criteria.weight }}</p>
     <button type="button" v-on:click.prevent="clickHandler">
       Delete
     </button>
@@ -10,22 +11,20 @@
 
 <script>
   export default {
-    name: 'IdeaOverview',
+    name: 'CriteriaOverview',
     props: {
-      ideaDelete: {
+      criteriaDelete: {
         type: Function,
         required: true
       },
-      idea: {
+      criteria: {
         type: Object,
         required: true
       }
     },
-    computed: {
+    methods: {
       clickHandler: function () {
-        return function () {
-          this.ideaDelete(this.idea)
-        }
+        this.criteriaDelete(this.criteria)
       }
     }
   }

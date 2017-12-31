@@ -2,14 +2,49 @@ import createApp from './create-app'
 import initServiceWorker from './service-worker'
 import {
   open as openDb,
+  criteriaAdd as dbCriteriaAdd,
+  criteriaDelete as dbCriteriaDelete,
+  criteriaClear as dbCriteriaClear,
+  criteriaGet as dbCriteriaGet,
   ideaAdd as dbIdeaAdd,
   ideaDelete as dbIdeaDelete,
   ideasClear as dbIdeasClear,
-  ideasGet as dbGetIdeas
+  ideasGet as dbIdeasGet
 } from './db'
 
 openDb()
   .then(db => {
+    const criteriaAdd = function (criteria) {
+      const nextCriterias = [ ...this.$root.criterias, criteria ].sort((a, b) => (
+        b.weight > a.weight || (b.weight === a.weight && b.created < a.created)
+          ? 1
+          : -1
+      ))
+
+      this.$root.criterias = nextCriterias
+
+      dbCriteriaAdd(db, criteria)
+        .then(() => console.log(`"${criteria.title}" saved to your browser's local DB`))
+        .catch(err => {
+          console.error(`Sorry, we failed to save "${criteria.title}" to your browser's local DB.`, err)
+        })
+    }
+
+    const criteriaDelete = function (criteria) {
+      for (let i = 0, l = this.$root.criterias.length; i < l; i++) {
+        if (criteria.id === this.$root.criterias[ i ].id) {
+          this.$root.criterias.splice(i, 1)
+          break
+        }
+      }
+
+      dbCriteriaDelete(db, criteria)
+        .then(() => console.log(`"${criteria.title}" deleted from your browser's local DB`))
+        .catch(err => {
+          console.error(`Sorry, we failed to delete "${criteria.title}" from your browser's local DB.`, err)
+        })
+    }
+
     const ideaAdd = function (idea) {
       this.$root.ideas.push(idea)
 
@@ -21,8 +56,6 @@ openDb()
     }
 
     const ideaDelete = function (idea) {
-      const title = idea.title
-
       for (let i = 0, l = this.$root.ideas.length; i < l; i++) {
         if (idea.id === this.$root.ideas[ i ].id) {
           this.$root.ideas.splice(i, 1)
@@ -31,18 +64,23 @@ openDb()
       }
 
       dbIdeaDelete(db, idea)
-        .then(() => console.log(`"${title}" deleted from your browser's local DB`))
+        .then(() => console.log(`"${idea.title}" deleted from your browser's local DB`))
         .catch(err => {
-          console.error(`Sorry, we failed to delete "${title}" from your browser's local DB.`, err)
+          console.error(`Sorry, we failed to delete "${idea.title}" from your browser's local DB.`, err)
         })
     }
 
-    const ideasUpload = function (ideas) {
+    const upload = function ({ ideas, criterias }) {
       this.$root.ideas = ideas
+      this.$root.criterias = criterias
 
-      dbIdeasClear(db)
+      Promise.all([ dbIdeasClear(db), dbCriteriaClear(db) ])
         .then(() => Promise.all(
-          ideas.map(idea => dbIdeaAdd(db, idea))
+          ideas
+            .map(idea => dbIdeaAdd(db, idea))
+            .concat(
+              criterias.map(criteria => dbCriteriaAdd(db, criteria))
+            )
         ))
         .then(() => console.log(`Your uploaded ideas were synced with your browser's local DB`))
         .catch(err => {
@@ -51,24 +89,26 @@ openDb()
     }
 
     const state = {
+      criteriaAdd,
+      criteriaDelete,
+      criterias: [],
       ideaAdd,
       ideaDelete,
       ideas: [],
-      ideasUpload,
+      upload,
       updateAvailable: false,
       updateServiceWorker: worker => worker.postMessage({ action: 'skipWaiting' })
     }
 
     const app = createApp(state, '#app')
 
-    dbGetIdeas(db)
-      .then(ideas => {
-        if (ideas.length) {
-          state.ideas = ideas
-        }
+    Promise.all([ dbIdeasGet(db), dbCriteriaGet(db) ])
+      .then(([ ideas, criterias ]) => {
+        state.ideas = ideas
+        state.criterias = criterias.reverse()
       })
       .catch(err => {
-        console.error(`Sorry, we failed to fetch the ideas from your browser's local database.`, err)
+        console.error(`Sorry, we failed to fetch data from your browser's local database.`, err)
       })
 
     if (!__DEV__) {

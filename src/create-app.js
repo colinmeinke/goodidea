@@ -11,10 +11,13 @@ const createApp = (data = {}, el) => {
         :updateServiceWorker="updateServiceWorker"
       >
         <home
+          :criteriaAdd="criteriaAdd"
+          :criteriaDelete="criteriaDelete"
+          :criterias="criterias"
           :ideaAdd="ideaAdd"
           :ideaDelete="ideaDelete"
           :ideas="ideas"
-          :ideasUpload="ideasUpload"
+          :upload="upload"
         >
         </home>
       </layout>

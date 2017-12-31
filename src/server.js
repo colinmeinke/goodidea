@@ -24,10 +24,13 @@ server.use(express.static('static', {
 
 server.get('/', (req, res) => {
   const app = createApp({
+    criteriaAdd: () => ({}),
+    criteriaDelete: () => ({}),
+    criterias: [],
     ideaAdd: () => ({}),
     ideaDelete: () => ({}),
     ideas: [],
-    ideasUpload: () => ({}),
+    upload: () => ({}),
     updateAvailable: false,
     updateServiceWorker: () => ({})
   })

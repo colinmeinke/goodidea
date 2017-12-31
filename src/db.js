@@ -1,21 +1,61 @@
 import idb from 'idb'
 
 const dbName = 'goodidea'
-const dbVersion = 1
+const dbVersion = 2
 const ideasStoreName = 'ideas'
+const criteriaStoreName = 'criteria'
 
 const init = dbUpgrade => {
+  let ideasStore
+  let criteriaStore
+
   switch (dbUpgrade.oldVersion) {
     case 0:
-      const ideasStore = dbUpgrade.createObjectStore(ideasStoreName, {
+      ideasStore = dbUpgrade.createObjectStore(ideasStoreName, {
         keyPath: 'id'
       })
 
       ideasStore.createIndex('created', 'created')
+    case 1:
+      criteriaStore = dbUpgrade.createObjectStore(criteriaStoreName, {
+        keyPath: 'id'
+      })
+
+      ideasStore = ideasStore || dbUpgrade.transaction.objectStore(ideasStoreName)
+
+      criteriaStore.createIndex('weight', 'weight')
+
+      ideasStore.createIndex('score', 'score')
   }
 }
 
 const open = () => idb.open(dbName, dbVersion, init)
+
+const criteriaAdd = (db, criteria) => {
+  const tx = db.transaction(criteriaStoreName, 'readwrite')
+  const criteriaStore = tx.objectStore(criteriaStoreName)
+  criteriaStore.put(criteria)
+  return tx.complete
+}
+
+const criteriaDelete = (db, criteria) => {
+  const tx = db.transaction(criteriaStoreName, 'readwrite')
+  const criteriaStore = tx.objectStore(criteriaStoreName)
+  return criteriaStore.delete(criteria.id)
+}
+
+const criteriaClear = db => {
+  const tx = db.transaction(criteriaStoreName, 'readwrite')
+  const criteriaStore = tx.objectStore(criteriaStoreName)
+  return criteriaStore.clear()
+}
+
+const criteriaGet = db => {
+  const tx = db.transaction(criteriaStoreName)
+  const criteriaStore = tx.objectStore(criteriaStoreName)
+  const weightIndex = criteriaStore.index('weight')
+  return weightIndex.getAll()
+}
 
 const ideaAdd = (db, idea) => {
   const tx = db.transaction(ideasStoreName, 'readwrite')
@@ -43,4 +83,14 @@ const ideasGet = db => {
   return createdIndex.getAll()
 }
 
-export { open, ideaAdd, ideaDelete, ideasClear, ideasGet }
+export {
+  open,
+  criteriaAdd,
+  criteriaDelete,
+  criteriaClear,
+  criteriaGet,
+  ideaAdd,
+  ideaDelete,
+  ideasClear,
+  ideasGet
+}
