@@ -30,6 +30,12 @@ const ideaDelete = (db, idea) => {
   return ideasStore.delete(idea.id)
 }
 
+const ideasClear = db => {
+  const tx = db.transaction(ideasStoreName, 'readwrite')
+  const ideasStore = tx.objectStore(ideasStoreName)
+  return ideasStore.clear()
+}
+
 const ideasGet = db => {
   const tx = db.transaction(ideasStoreName)
   const ideasStore = tx.objectStore(ideasStoreName)
@@ -37,4 +43,4 @@ const ideasGet = db => {
   return createdIndex.getAll()
 }
 
-export { open, ideaAdd, ideaDelete, ideasGet }
+export { open, ideaAdd, ideaDelete, ideasClear, ideasGet }

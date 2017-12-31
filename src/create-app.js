@@ -14,6 +14,7 @@ const createApp = (data = {}, el) => {
           :ideaAdd="ideaAdd"
           :ideaDelete="ideaDelete"
           :ideas="ideas"
+          :ideasUpload="ideasUpload"
         >
         </home>
       </layout>

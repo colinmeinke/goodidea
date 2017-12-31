@@ -9,6 +9,8 @@
       />
     </IdeaList>
     <IdeaAddForm :ideaAdd="ideaAdd" />
+    <IdeasDownload :ideas="ideas" />
+    <IdeasUpload :ideasUpload="ideasUpload" />
   </div>
 </template>
 
@@ -16,6 +18,8 @@
   import IdeaAddForm from './IdeaAddForm.vue'
   import IdeaList from './IdeaList.vue'
   import IdeaOverview from './IdeaOverview.vue'
+  import IdeasDownload from './IdeasDownload.vue'
+  import IdeasUpload from './IdeasUpload.vue'
 
   export default {
     name: 'Home',
@@ -31,8 +35,18 @@
       ideas: {
         type: Array,
         required: true
+      },
+      ideasUpload: {
+        type: Function,
+        required: true
       }
     },
-    components: { IdeaAddForm, IdeaList, IdeaOverview }
+    components: {
+      IdeaAddForm,
+      IdeaList,
+      IdeaOverview,
+      IdeasDownload,
+      IdeasUpload
+    }
   }
 </script>

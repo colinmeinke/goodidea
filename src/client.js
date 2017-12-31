@@ -4,6 +4,7 @@ import {
   open as openDb,
   ideaAdd as dbIdeaAdd,
   ideaDelete as dbIdeaDelete,
+  ideasClear as dbIdeasClear,
   ideasGet as dbGetIdeas
 } from './db'
 
@@ -36,10 +37,24 @@ openDb()
         })
     }
 
+    const ideasUpload = function (ideas) {
+      this.$root.ideas = ideas
+
+      dbIdeasClear(db)
+        .then(() => Promise.all(
+          ideas.map(idea => dbIdeaAdd(db, idea))
+        ))
+        .then(() => console.log(`Your uploaded ideas were synced with your browser's local DB`))
+        .catch(err => {
+          console.log(`Sorry, your uploaded ideas were not synced with your browser's local DB.`, err)
+        })
+    }
+
     const state = {
       ideaAdd,
       ideaDelete,
       ideas: [],
+      ideasUpload,
       updateAvailable: false,
       updateServiceWorker: worker => worker.postMessage({ action: 'skipWaiting' })
     }

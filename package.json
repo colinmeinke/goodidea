@@ -43,7 +43,7 @@
   "name": "goodidea",
   "scripts": {
     "build": "yarn build:pro",
-    "build:dev": "yarn tidy && yarn build:dev:client && yarn build:dev:server && yarn build:dev:sw && yarn build:copy && yarn build:version",
+    "build:dev": "yarn tidy && yarn build:dev:client && yarn build:dev:server && yarn build:copy",
     "build:dev:client": "webpack --config build/client.dev.babel.js",
     "build:dev:server": "webpack --config build/server.dev.babel.js",
     "build:dev:sw": "NODE_ENV=development babel src/sw.js --out-file dist/sw.js",

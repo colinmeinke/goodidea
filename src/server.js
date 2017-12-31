@@ -27,6 +27,7 @@ server.get('/', (req, res) => {
     ideaAdd: () => ({}),
     ideaDelete: () => ({}),
     ideas: [],
+    ideasUpload: () => ({}),
     updateAvailable: false,
     updateServiceWorker: () => ({})
   })
