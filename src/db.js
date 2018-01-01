@@ -83,8 +83,8 @@ const ideasClear = db => {
 const ideasGet = db => {
   const tx = db.transaction(ideasStoreName)
   const ideasStore = tx.objectStore(ideasStoreName)
-  const createdIndex = ideasStore.index('created')
-  return createdIndex.getAll()
+  const scoreIndex = ideasStore.index('score')
+  return scoreIndex.getAll()
 }
 
 export {
