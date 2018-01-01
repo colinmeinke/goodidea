@@ -2,17 +2,40 @@
   <li>
     <h3>{{ idea.title }}</h3>
     <p v-if="idea.description">{{ idea.description }}</p>
-    <button type="button" v-on:click.prevent="clickHandler">
+
+    <ScoreForm
+      :criterias="criterias"
+      :idea="idea"
+      :ideaScore="ideaScore"
+    />
+
+    <p>
+      <strong>
+        Score: {{ idea.score || '?' }}
+      </strong>
+    </p>
+
+    <button type="button" v-on:click.prevent="deleteHandler">
       Delete
     </button>
   </li>
 </template>
 
 <script>
+  import ScoreForm from './ScoreForm.vue'
+
   export default {
     name: 'IdeaOverview',
     props: {
+      criterias: {
+        type: Array,
+        required: true
+      },
       ideaDelete: {
+        type: Function,
+        required: true
+      },
+      ideaScore: {
         type: Function,
         required: true
       },
@@ -21,12 +44,14 @@
         required: true
       }
     },
-    computed: {
-      clickHandler: function () {
-        return function () {
-          this.ideaDelete(this.idea)
-        }
+    methods: {
+      deleteHandler: function () {
+        this.ideaDelete(this.idea)
+      },
+      rankHandler: function () {
+        alert('SHOW RANK UI')
       }
-    }
+    },
+    components: { ScoreForm }
   }
 </script>

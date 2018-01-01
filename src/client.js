@@ -12,18 +12,46 @@ import {
   ideasGet as dbIdeasGet
 } from './db'
 
+const calculateScore = (criterias, criteriaScores) => {
+  let totalWeight = 0
+
+  return criterias.map(criteria => {
+    totalWeight += criteria.weight
+    return [ criteria.weight, criteriaScores[ criteria.id ] ]
+  }).reduce((accumulatedScore, [ nextWeight, nextScore ]) => (
+    accumulatedScore + nextScore * nextWeight / totalWeight
+  ), 0)
+}
+
+const sortIdeas = (a, b) => (
+  b.score > a.score || (b.score === a.score && b.created < a.created)
+    ? 1
+    : -1
+)
+
+const sortCriterias = (a, b) => (
+  b.weight > a.weight || (b.weight === a.weight && b.created < a.created)
+    ? 1
+    : -1
+)
+
 openDb()
   .then(db => {
     const criteriaAdd = function (criteria) {
-      const nextCriterias = [ ...this.$root.criterias, criteria ].sort((a, b) => (
-        b.weight > a.weight || (b.weight === a.weight && b.created < a.created)
-          ? 1
-          : -1
-      ))
+      const nextCriterias = [ ...this.$root.criterias, criteria ].sort(sortCriterias)
 
       this.$root.criterias = nextCriterias
 
-      dbCriteriaAdd(db, criteria)
+      this.$root.ideas = this.$root.ideas.map(idea => ({
+        ...idea,
+        criteriaScores: { ...idea.criteriaScores, [criteria.id]: null },
+        score: null
+      })).sort(sortIdeas)
+
+      Promise.all([
+        dbCriteriaAdd(db, criteria),
+        Promise.all(this.$root.ideas.map(idea => dbIdeaAdd(db, idea)))
+      ])
         .then(() => console.log(`"${criteria.title}" saved to your browser's local DB`))
         .catch(err => {
           console.error(`Sorry, we failed to save "${criteria.title}" to your browser's local DB.`, err)
@@ -38,7 +66,22 @@ openDb()
         }
       }
 
-      dbCriteriaDelete(db, criteria)
+      this.$root.ideas = this.$root.ideas.map(idea => {
+        const nextCriteriaScores = { ...idea.criteriaScores }
+
+        delete nextCriteriaScores[ criteria.id ]
+
+        return {
+          ...idea,
+          criteriaScores: nextCriteriaScores,
+          score: calculateScore(this.$root.criterias, nextCriteriaScores)
+        }
+      }).sort(sortIdeas)
+
+      Promise.all([
+        dbCriteriaDelete(db, criteria),
+        Promise.all(this.$root.ideas.map(idea => dbIdeaAdd(db, idea)))
+      ])
         .then(() => console.log(`"${criteria.title}" deleted from your browser's local DB`))
         .catch(err => {
           console.error(`Sorry, we failed to delete "${criteria.title}" from your browser's local DB.`, err)
@@ -47,6 +90,7 @@ openDb()
 
     const ideaAdd = function (idea) {
       this.$root.ideas.push(idea)
+      this.$root.ideas.sort(sortIdeas)
 
       dbIdeaAdd(db, idea)
         .then(() => console.log(`"${idea.title}" saved to your browser's local DB`))
@@ -67,6 +111,26 @@ openDb()
         .then(() => console.log(`"${idea.title}" deleted from your browser's local DB`))
         .catch(err => {
           console.error(`Sorry, we failed to delete "${idea.title}" from your browser's local DB.`, err)
+        })
+    }
+
+    const ideaScore = function (idea, criteriaScores) {
+      const ideaIndex = this.$root.ideas.indexOf(idea)
+
+      const nextIdea = {
+        ...idea,
+        criteriaScores,
+        score: calculateScore(this.$root.criterias, criteriaScores)
+      }
+
+      this.$root.ideas[ ideaIndex ] = nextIdea
+
+      this.$root.ideas.sort(sortIdeas)
+
+      dbIdeaAdd(db, nextIdea)
+        .then(() => console.log(`"${idea.title}" scores saved to your browser's local DB`))
+        .catch(err => {
+          console.error(`Sorry, we failed to save "${idea.title}" scores to your browser's local DB.`, err)
         })
     }
 
@@ -94,6 +158,7 @@ openDb()
       criterias: [],
       ideaAdd,
       ideaDelete,
+      ideaScore,
       ideas: [],
       upload,
       updateAvailable: false,

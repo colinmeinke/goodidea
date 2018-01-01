@@ -4,8 +4,10 @@
       <IdeaOverview
         v-for="(idea, i) in ideas"
         :key="i"
+        :criterias="criterias"
         :idea="idea"
         :ideaDelete="ideaDelete"
+        :ideaScore="ideaScore"
       />
     </IdeaList>
 
@@ -58,6 +60,10 @@
         required: true
       },
       ideaDelete: {
+        type: Function,
+        required: true
+      },
+      ideaScore: {
         type: Function,
         required: true
       },

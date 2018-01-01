@@ -68,7 +68,9 @@
             id: shortid.generate(),
             created: Date.now(),
             title: this.title.trim(),
-            description: this.description.trim()
+            description: this.description.trim(),
+            criteriaScores: {},
+            score: null
           })
 
           this.title = ''

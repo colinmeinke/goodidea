@@ -23,6 +23,10 @@ module.exports = {
         loader: 'vue-loader'
       },
       {
+        test: /\.js$/,
+        loader: 'babel-loader'
+      },
+      {
         test: /\.(js|vue)$/,
         loader: 'string-replace-loader',
         query: {

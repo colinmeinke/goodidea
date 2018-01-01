@@ -29,6 +29,7 @@ server.get('/', (req, res) => {
     criterias: [],
     ideaAdd: () => ({}),
     ideaDelete: () => ({}),
+    ideaScore: () => ({}),
     ideas: [],
     upload: () => ({}),
     updateAvailable: false,

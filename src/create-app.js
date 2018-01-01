@@ -16,6 +16,7 @@ const createApp = (data = {}, el) => {
           :criterias="criterias"
           :ideaAdd="ideaAdd"
           :ideaDelete="ideaDelete"
+          :ideaScore="ideaScore"
           :ideas="ideas"
           :upload="upload"
         >

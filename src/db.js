@@ -41,13 +41,15 @@ const criteriaAdd = (db, criteria) => {
 const criteriaDelete = (db, criteria) => {
   const tx = db.transaction(criteriaStoreName, 'readwrite')
   const criteriaStore = tx.objectStore(criteriaStoreName)
-  return criteriaStore.delete(criteria.id)
+  criteriaStore.delete(criteria.id)
+  return tx.complete
 }
 
 const criteriaClear = db => {
   const tx = db.transaction(criteriaStoreName, 'readwrite')
   const criteriaStore = tx.objectStore(criteriaStoreName)
-  return criteriaStore.clear()
+  criteriaStore.clear()
+  return tx.complete
 }
 
 const criteriaGet = db => {
@@ -67,13 +69,15 @@ const ideaAdd = (db, idea) => {
 const ideaDelete = (db, idea) => {
   const tx = db.transaction(ideasStoreName, 'readwrite')
   const ideasStore = tx.objectStore(ideasStoreName)
-  return ideasStore.delete(idea.id)
+  ideasStore.delete(idea.id)
+  return tx.complete
 }
 
 const ideasClear = db => {
   const tx = db.transaction(ideasStoreName, 'readwrite')
   const ideasStore = tx.objectStore(ideasStoreName)
-  return ideasStore.clear()
+  ideasStore.clear()
+  return tx.complete
 }
 
 const ideasGet = db => {

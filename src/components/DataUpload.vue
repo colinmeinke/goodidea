@@ -49,7 +49,7 @@
               throw new TypeError(`An idea must be an object`)
             }
 
-            const { id, created, title, description } = idea
+            const { id, created, title, description, criteriaScores, score } = idea
 
             if (typeof id !== 'string') {
               throw new TypeError(`An idea must have an id property, and it must be a string`)
@@ -67,7 +67,15 @@
               throw new TypeError(`An idea must have a description property, and it must be a string`)
             }
 
-            return { id, created, title }
+            if (typeof criteriaScores !== 'object') {
+              throw new TypeError(`An idea must have a criteriaScores property, and it must be an object`)
+            }
+
+            if (typeof score !== 'number') {
+              throw new TypeError(`An idea must have a score property, and it must be a number`)
+            }
+
+            return { id, created, title, description, criteriaScores, score }
           })
 
           const validCriterias = criterias.map(criteria => {
