@@ -169,7 +169,7 @@ openDb()
 
     Promise.all([ dbIdeasGet(db), dbCriteriaGet(db) ])
       .then(([ ideas, criterias ]) => {
-        state.ideas = ideas
+        state.ideas = ideas.reverse()
         state.criterias = criterias.reverse()
       })
       .catch(err => {
