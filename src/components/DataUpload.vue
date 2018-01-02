@@ -71,11 +71,17 @@
               throw new TypeError(`An idea must have a criteriaScores property, and it must be an object`)
             }
 
-            if (typeof score !== 'number') {
-              throw new TypeError(`An idea must have a score property, and it must be a number`)
+            if (score && typeof score !== 'number') {
+              throw new TypeError(`If defined, an idea's score property must be a number`)
             }
 
-            return { id, created, title, description, criteriaScores, score }
+            const validIdea = { id, created, title, description, criteriaScores }
+
+            if (score) {
+              validIdea.score = score
+            }
+
+            return validIdea
           })
 
           const validCriterias = criterias.map(criteria => {
