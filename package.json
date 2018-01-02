@@ -19,7 +19,7 @@
     "compression": "^1.7.1",
     "express": "^4.16.2"
   },
-  "description": "Rank your ideas based on your own criteria",
+  "description": "List and rank your ideas",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",

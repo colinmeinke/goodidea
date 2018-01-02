@@ -37,7 +37,7 @@ server.get('/', (req, res) => {
   })
 
   const context = {
-    description: 'Rank your ideas based on your own criteria',
+    description: 'List and rank your ideas',
     title: 'Good idea!',
   }
 
