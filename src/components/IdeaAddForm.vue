@@ -69,8 +69,7 @@
             created: Date.now(),
             title: this.title.trim(),
             description: this.description.trim(),
-            criteriaScores: {},
-            score: null
+            criteriaScores: {}
           })
 
           this.title = ''

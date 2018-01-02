@@ -1,21 +1,35 @@
 <template>
   <li>
     <h3>{{ idea.title }}</h3>
+
     <p v-if="idea.description">{{ idea.description }}</p>
+
+    <p>
+      <strong>
+        Score:
+        {{
+          idea.score
+            ? idea.score % 1 === 0
+              ? idea.score
+              : Number((idea.score).toFixed(1))
+            : '?'
+        }}
+      </strong>
+    </p>
 
     <ScoreForm
       :criterias="criterias"
       :idea="idea"
       :ideaScore="ideaScore"
+      :onSubmit="toggleScoreForm"
+      v-if="showScoreForm"
     />
 
-    <p>
-      <strong>
-        Score: {{ idea.score || '?' }}
-      </strong>
-    </p>
+    <button type="button" v-on:click.prevent="toggleScoreForm">
+      {{ showScoreForm ? 'Cancel' : 'Edit score' }}
+    </button>
 
-    <button type="button" v-on:click.prevent="deleteHandler">
+    <button type="button" v-on:click.prevent="deleteIdea">
       Delete
     </button>
   </li>
@@ -44,12 +58,17 @@
         required: true
       }
     },
+    data: function () {
+      return {
+        showScoreForm: false
+      }
+    },
     methods: {
-      deleteHandler: function () {
+      deleteIdea: function () {
         this.ideaDelete(this.idea)
       },
-      rankHandler: function () {
-        alert('SHOW RANK UI')
+      toggleScoreForm: function () {
+        this.showScoreForm = !this.showScoreForm
       }
     },
     components: { ScoreForm }

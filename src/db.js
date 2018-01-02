@@ -1,4 +1,5 @@
 import idb from 'idb'
+import { sortIdeas, sortCriterias } from './helpers'
 
 const dbName = 'goodidea'
 const dbVersion = 2
@@ -6,26 +7,19 @@ const ideasStoreName = 'ideas'
 const criteriaStoreName = 'criteria'
 
 const init = dbUpgrade => {
-  let ideasStore
-  let criteriaStore
-
   switch (dbUpgrade.oldVersion) {
     case 0:
-      ideasStore = dbUpgrade.createObjectStore(ideasStoreName, {
+      const ideasStore = dbUpgrade.createObjectStore(ideasStoreName, {
         keyPath: 'id'
       })
 
       ideasStore.createIndex('created', 'created')
     case 1:
-      criteriaStore = dbUpgrade.createObjectStore(criteriaStoreName, {
+      const criteriaStore = dbUpgrade.createObjectStore(criteriaStoreName, {
         keyPath: 'id'
       })
 
-      ideasStore = ideasStore || dbUpgrade.transaction.objectStore(ideasStoreName)
-
       criteriaStore.createIndex('weight', 'weight')
-
-      ideasStore.createIndex('score', 'score')
   }
 }
 
@@ -52,12 +46,14 @@ const criteriaClear = db => {
   return tx.complete
 }
 
-const criteriaGet = db => {
+const criteriaGet = db => new Promise((resolve, reject) => {
   const tx = db.transaction(criteriaStoreName)
   const criteriaStore = tx.objectStore(criteriaStoreName)
-  const weightIndex = criteriaStore.index('weight')
-  return weightIndex.getAll()
-}
+
+  criteriaStore.getAll()
+    .then(criterias => resolve(criterias.sort(sortCriterias)))
+    .catch(reject)
+})
 
 const ideaAdd = (db, idea) => {
   const tx = db.transaction(ideasStoreName, 'readwrite')
@@ -80,12 +76,14 @@ const ideasClear = db => {
   return tx.complete
 }
 
-const ideasGet = db => {
+const ideasGet = db => new Promise((resolve, reject) => {
   const tx = db.transaction(ideasStoreName)
   const ideasStore = tx.objectStore(ideasStoreName)
-  const scoreIndex = ideasStore.index('score')
-  return scoreIndex.getAll()
-}
+
+  ideasStore.getAll()
+    .then(ideas => resolve(ideas.sort(sortIdeas)))
+    .catch(reject)
+})
 
 export {
   open,

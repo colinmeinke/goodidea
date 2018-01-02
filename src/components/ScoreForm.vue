@@ -8,7 +8,7 @@
       :ideaId="idea.id"
       :initialScore="idea.criteriaScores[ criteria.id ]"
       :key="i"
-      :ref="criteria.id"
+      :ref="'score' + idea.id + criteria.id"
       :changeHandler="isDisabled"
     />
 
@@ -40,6 +40,9 @@
       ideaScore: {
         type: Function,
         required: true
+      },
+      onSubmit: {
+        type: Function
       }
     },
     methods: {
@@ -58,7 +61,7 @@
 
         for (let i = 0, l = this.criterias.length; i < l; i++) {
           const criteria = this.criterias[ i ]
-          const v = this.$refs[ criteria.id ][ 0 ].$refs.input.value
+          const v = this.$refs[ `score${this.idea.id}${criteria.id}` ][ 0 ].$refs.input.value
           const value = Math.max(Math.min(parseInt(v, 10), 10), 1) || null
           criteriaScores[ criteria.id ] = value
         }
@@ -70,6 +73,10 @@
 
         if (this.validForm(criteriaScores)) {
           this.ideaScore(this.idea, criteriaScores)
+
+          if (this.onSubmit) {
+            this.onSubmit()
+          }
         }
       }
     },

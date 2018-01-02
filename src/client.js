@@ -11,8 +11,17 @@ import {
   ideasClear as dbIdeasClear,
   ideasGet as dbIdeasGet
 } from './db'
+import { sortIdeas, sortCriterias } from './helpers'
 
 const calculateScore = (criterias, criteriaScores) => {
+  const hasScore = Object.keys(criteriaScores).reduce((x, id) => (
+    x && criteriaScores[ id ] !== null
+  ))
+
+  if (!hasScore) {
+    return null
+  }
+
   let totalWeight = 0
 
   return criterias.map(criteria => {
@@ -23,18 +32,6 @@ const calculateScore = (criterias, criteriaScores) => {
   ), 0)
 }
 
-const sortIdeas = (a, b) => (
-  b.score > a.score || (b.score === a.score && b.created < a.created)
-    ? 1
-    : -1
-)
-
-const sortCriterias = (a, b) => (
-  b.weight > a.weight || (b.weight === a.weight && b.created < a.created)
-    ? 1
-    : -1
-)
-
 openDb()
   .then(db => {
     const criteriaAdd = function (criteria) {
@@ -42,11 +39,16 @@ openDb()
 
       this.$root.criterias = nextCriterias
 
-      this.$root.ideas = this.$root.ideas.map(idea => ({
-        ...idea,
-        criteriaScores: { ...idea.criteriaScores, [criteria.id]: null },
-        score: null
-      })).sort(sortIdeas)
+      this.$root.ideas = this.$root.ideas.map(idea => {
+        const nextIdea = {
+          ...idea,
+          criteriaScores: { ...idea.criteriaScores, [criteria.id]: null }
+        }
+
+        delete nextIdea.score
+
+        return nextIdea
+      }).sort(sortIdeas)
 
       Promise.all([
         dbCriteriaAdd(db, criteria),
@@ -71,11 +73,17 @@ openDb()
 
         delete nextCriteriaScores[ criteria.id ]
 
-        return {
+        const nextIdea = {
           ...idea,
           criteriaScores: nextCriteriaScores,
           score: calculateScore(this.$root.criterias, nextCriteriaScores)
         }
+
+        if (!nextIdea.score) {
+          delete nextIdea.score
+        }
+
+        return nextIdea
       }).sort(sortIdeas)
 
       Promise.all([
@@ -121,6 +129,10 @@ openDb()
         ...idea,
         criteriaScores,
         score: calculateScore(this.$root.criterias, criteriaScores)
+      }
+
+      if (!nextIdea.score) {
+        delete nextIdea.score
       }
 
       this.$root.ideas[ ideaIndex ] = nextIdea
@@ -169,8 +181,8 @@ openDb()
 
     Promise.all([ dbIdeasGet(db), dbCriteriaGet(db) ])
       .then(([ ideas, criterias ]) => {
-        state.ideas = ideas.reverse()
-        state.criterias = criterias.reverse()
+        state.ideas = ideas
+        state.criterias = criterias
       })
       .catch(err => {
         console.error(`Sorry, we failed to fetch data from your browser's local database.`, err)
