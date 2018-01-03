@@ -43,14 +43,27 @@ const hashAllFiles = dir => new Promise((resolve, reject) => {
     .catch(reject)
 })
 
+const findAndReplace = (dir, replaceData) => new Promise((resolve, reject) => {
+  fs.readdirAsync(dir)
+    .then(files => Promise.all(files.map(fileName => new Promise((res, rej) => {
+      fs.lstatAsync(`${dir}/${fileName}`)
+        .then(stat => {
+          if (stat.isDirectory()) {
+            findAndReplace(`${dir}/${fileName}`, replaceData).then(res)
+          } else {
+            replace(`${dir}/${fileName}`, replaceData).then(res)
+          }
+        })
+        .catch(rej)
+    }))))
+    .then(resolve)
+    .catch(reject)
+})
+
 hashAllFiles(staticDir)
-  .then(replaceData => new Promise((resolve, reject) => {
-    fs.readdirAsync(distDir)
-      .then(files => Promise.all(files.map(fileName => (
-        replace(`${distDir}/${fileName}`, replaceData)
-      ))))
-      .then(resolve)
-      .catch(reject)
-  }))
+  .then(replaceData => Promise.all([
+    findAndReplace(distDir, replaceData),
+    findAndReplace(staticDir, replaceData)
+  ]))
   .then(() => console.log('Cache busting succeeded!'))
   .catch(err => console.error('Cache busting failed', err))
