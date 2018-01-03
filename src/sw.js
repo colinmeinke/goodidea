@@ -8,7 +8,11 @@ self.addEventListener('install', event => {
       .then(cache => cache.addAll([
         '/',
         '/manifest.json',
-        '/client.js'
+        '/client.js',
+        '/icons/favicon-16.png',
+        '/icons/favicon-32.png',
+        '/icons/favicon-64.png',
+        '/icons/logo.svg'
       ]))
   )
 })

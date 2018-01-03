@@ -33,7 +33,7 @@ const replace = (filePath, replaceData) => new Promise((resolve, reject) => {
   readStream.on('data', chunk => {
     let content = chunk.toString()
 
-    replaceData.map(([ find, replace ]) => {
+    replaceData.map(({ find, replace }) => {
       content = content.replace(new RegExp(find, 'g'), replace)
     })
 

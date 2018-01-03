@@ -51,7 +51,7 @@
     "build:pro:client": "webpack --config build/client.pro.babel.js",
     "build:pro:server": "webpack --config build/server.pro.babel.js",
     "build:pro:sw": "NODE_ENV=production babel src/sw.js --out-file dist/sw.js",
-    "build:copy": "cp src/manifest.json static/manifest.json && cp src/page.html dist/page.html",
+    "build:copy": "cp src/manifest.json static/manifest.json && cp src/page.html dist/page.html && cp -R src/icons static/icons",
     "build:cache-bust": "node build/cache-bust.js",
     "build:version": "node build/version.js",
     "start:dev": "NODE_ENV=development node dist/server.js",
