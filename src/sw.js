@@ -9,9 +9,9 @@ self.addEventListener('install', event => {
         '/',
         '/manifest.json',
         '/client.js',
-        '/icons/favicon-16.png',
-        '/icons/favicon-32.png',
-        '/icons/favicon-64.png',
+        '/icons/favicon-16x16.png',
+        '/icons/favicon-32x32.png',
+        '/icons/favicon-64x64.png',
         '/icons/logo.svg'
       ]))
   )
