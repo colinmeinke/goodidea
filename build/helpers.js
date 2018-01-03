@@ -2,10 +2,15 @@ const crypto = require('crypto')
 const Promise = require('bluebird')
 const fs = Promise.promisifyAll(require('fs'))
 
-const hashFileName = (fileName, hash) => {
+const fileNameExt = fileName => {
   const fileNameParts = fileName.split('.')
-  const extension = fileNameParts.pop()
-  return `${fileNameParts.join('.')}.${hash}.${extension}`
+  const ext = fileNameParts.pop()
+  return { name: fileNameParts.join('.'), ext }
+}
+
+const hashFileName = (fileName, hash) => {
+  const { name, ext } = fileNameExt(fileName)
+  return `${name}.${hash}.${ext}`
 }
 
 const hashFromFile = filePath => new Promise((resolve, reject) => {
@@ -24,8 +29,13 @@ const hashFromFile = filePath => new Promise((resolve, reject) => {
 })
 
 const replace = (filePath, replaceData) => new Promise((resolve, reject) => {
+  const parts = filePath.split('/')
+  const fileName = parts.pop()
+  const dir = parts.join('/')
+  const { name, ext } = fileNameExt(fileName)
+  const tmpFilePath = `${dir}/${name}.tmp.${ext}`
   const readStream = fs.createReadStream(filePath)
-  const writeStream = fs.createWriteStream(`${filePath}.tmp`)
+  const writeStream = fs.createWriteStream(tmpFilePath)
 
   readStream.on('error', reject)
   writeStream.on('error', reject)
@@ -41,7 +51,7 @@ const replace = (filePath, replaceData) => new Promise((resolve, reject) => {
   })
 
   readStream.on('close', () => {
-    fs.renameAsync(`${filePath}.tmp`, filePath)
+    fs.renameAsync(tmpFilePath, filePath)
       .then(resolve)
       .catch(reject)
   })

@@ -51,6 +51,10 @@ const hashFiles = (dir, files) => new Promise((resolve, reject) => {
 const findAndReplace = (dir, replaceData) => new Promise((resolve, reject) => {
   fs.readdirAsync(dir)
     .then(files => Promise.all(files.map(fileName => new Promise((res, rej) => {
+      if (!fileName.match(/(js|json|html)$/)) {
+        return res()
+      }
+
       fs.lstatAsync(`${dir}/${fileName}`)
         .then(stat => {
           if (stat.isDirectory()) {
