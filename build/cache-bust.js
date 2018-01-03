@@ -3,6 +3,7 @@ const Promise = require('bluebird')
 const fs = Promise.promisifyAll(require('fs'))
 const { hashFileName, hashFromFile, replace } = require('./helpers')
 
+const iconsDir = path.resolve(__dirname, '../static/icons')
 const staticDir = path.resolve(__dirname, '../static')
 const distDir = path.resolve(__dirname, '../dist')
 
@@ -17,30 +18,34 @@ const hashFile = (dir, fileName) => new Promise((resolve, reject) => {
     .catch(reject)
 })
 
-const hashAllFiles = dir => new Promise((resolve, reject) => {
-  fs.readdirAsync(dir)
-    .then(files => Promise.all(files.map(fileName => new Promise((res, rej) => {
-      fs.lstatAsync(`${dir}/${fileName}`)
+const hashFiles = (dir, files) => new Promise((resolve, reject) => {
+  Promise.all(files.map(file => (
+    new Promise((res, rej) => {
+      fs.lstatAsync(`${dir}/${file}`)
         .then(stat => {
           if (stat.isDirectory()) {
-            res(hashAllFiles(`${dir}/${fileName}`))
+            const subdir = `${dir}/${file}`
+
+            fs.readdirAsync(subdir).then(subdirFiles => {
+              res(hashFiles(subdir, subdirFiles))
+            })
           } else {
-            res(hashFile(dir, fileName))
+            res(hashFile(dir, file))
           }
         })
         .catch(rej)
-    }))))
-    .then(data => {
-      resolve(data.reduce((nextData, x) => {
-        if (Array.isArray(x)) {
-          return nextData.concat(x)
-        } else {
-          nextData.push(x)
-          return nextData
-        }
-      }, []))
     })
-    .catch(reject)
+  ))).then(data => {
+    resolve(data.reduce((nextData, x) => {
+      if (Array.isArray(x)) {
+        return nextData.concat(x)
+      } else {
+        nextData.push(x)
+        return nextData
+      }
+    }, []))
+  })
+  .catch(reject)
 })
 
 const findAndReplace = (dir, replaceData) => new Promise((resolve, reject) => {
@@ -60,10 +65,15 @@ const findAndReplace = (dir, replaceData) => new Promise((resolve, reject) => {
     .catch(reject)
 })
 
-hashAllFiles(staticDir)
-  .then(replaceData => Promise.all([
-    findAndReplace(distDir, replaceData),
-    findAndReplace(staticDir, replaceData)
-  ]))
+const replaceInFiles = replaceData => Promise.all([
+  findAndReplace(distDir, replaceData),
+  findAndReplace(staticDir, replaceData)
+])
+
+fs.readdirAsync(iconsDir)
+  .then(iconFiles => hashFiles(iconsDir, iconFiles))
+  .then(replaceInFiles)
+  .then(() => hashFiles(staticDir, [ 'client.js', 'manifest.json' ]))
+  .then(replaceInFiles)
   .then(() => console.log('Cache busting succeeded!'))
   .catch(err => console.error('Cache busting failed', err))
