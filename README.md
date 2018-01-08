@@ -4,7 +4,8 @@
 
 <h1 align="center">Good idea!</h1>
 
-<p align="center">List and rank your ideas</p>
+<p align="center"style="margin-bottom: 0;">List and rank your ideas</p>
+<p align="center">[goodidea.now.sh](https://goodidea.now.sh)</p>
 
 <br />
 <br />
