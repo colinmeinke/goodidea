@@ -13,6 +13,19 @@ import {
 } from './db'
 import { sortIdeas, sortCriterias } from './helpers'
 
+const favicon16 = document.querySelector('link[rel="icon"][sizes="16x16"]')
+const favicon32 = document.querySelector('link[rel="icon"][sizes="32x32"]')
+
+const iconsOff = () => {
+  favicon16.href = favicon16.dataset.off
+  favicon32.href = favicon32.dataset.off
+}
+
+const iconsOn = () => {
+  favicon16.href = favicon16.dataset.on
+  favicon32.href = favicon32.dataset.on
+}
+
 const calculateScore = (criterias, criteriaScores) => {
   const hasScore = Object.keys(criteriaScores).reduce((x, id) => (
     x && criteriaScores[ id ] !== null
@@ -97,6 +110,10 @@ openDb()
     }
 
     const ideaAdd = function (idea) {
+      if (!this.$root.ideas.length) {
+        iconsOn()
+      }
+
       this.$root.ideas.push(idea)
       this.$root.ideas.sort(sortIdeas)
 
@@ -113,6 +130,10 @@ openDb()
           this.$root.ideas.splice(i, 1)
           break
         }
+      }
+
+      if (!this.$root.ideas.length) {
+        iconsOff()
       }
 
       dbIdeaDelete(db, idea)
@@ -183,6 +204,10 @@ openDb()
       .then(([ ideas, criterias ]) => {
         state.ideas = ideas
         state.criterias = criterias
+
+        if (ideas.length) {
+          iconsOn()
+        }
       })
       .catch(err => {
         console.error(`Sorry, we failed to fetch data from your browser's local database.`, err)
