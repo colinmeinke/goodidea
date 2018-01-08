@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+  <defs>
+    <linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#D4D4CF" stop-opacity=".3"/>
+      <stop offset="100%" stop-color="#D4D4CF" stop-opacity=".05"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <path fill="#333329" d="M24 56l8 4v4l-4-2-4-6zm0-8l8 4v8l-8-4v-8z"/>
+    <path fill="#595947" d="M32 64V52l8-4v8l-4 6z"/>
+    <path fill="#595947" d="M40 48l-8-4-8 4 8 4z"/>
+    <path fill="#FAFAF5" fill-opacity=".7" d="M32 40l16 8-16 8-16-8z" opacity=".4"/>
+    <path fill="#F0F0EB" fill-opacity=".4" d="M32 0v40l-16 8-8-8V12.008z"/>
+    <path fill="#E6E5E1" fill-opacity=".4" d="M32 40V0l24 12v28l-8 8z"/>
+    <path fill="#FAF219" d="M28 28l4-2.011L34 35l-4 2z"/>
+    <path fill="#F2EB18" d="M40 30l-4 14v4l-3.998 1.999L32 46l4-14v-4l4-2z"/>
+    <path fill="#E6DF17" d="M24 26v-4l12 6v4l-4 14-.002 3.999L28 48v-4l-4-18zm4 2l2 9 2-7-4-2z"/>
+    <path fill="#FFF719" d="M24 22l4-2 12.002 5.993L36 28z"/>
+    <path fill="#FCF632" fill-opacity=".2" d="M8 12L32 0l24 12v28l-8 8-16 8-16-8-8-8z"/>
+    <path fill="#E6E5E1" fill-opacity=".4" d="M8 40V12l24 12v32l-16-8z"/>
+    <path fill="#F0F0EB" fill-opacity=".4" d="M55.99 40.01L48 48l-16 8V24.008L56 12v28.005l-.01.005z"/>
+    <path fill="#FAFAF5" fill-opacity=".4" d="M32 0l24 12-24 12L8 12z"/>
+    <path fill="url(#a)" fill-opacity=".3" d="M0 12L24 0l24 12v28l-8 8-16 8-16-8-8-8V12zm2 1L24 2l22 11v26l-7 7-15 8-15-8-7-7V13z" transform="translate(8)"/>
+  </g>
+</svg>

@@ -4,10 +4,24 @@
     <title>{{ title }}</title>
     <meta name="description" content="{{ description }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#EAEDE6">
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/logo-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/logo-16x16.png" />
+    <meta name="theme-color" content="#F0F2ED">
+    <link rel="manifest" href="/manifest.json" data-on="/manifest-on.json" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/logo-32x32.png"
+      data-on="/icons/logo-on-32x32.png"
+    />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/logo-16x16.png"
+      data-on="/icons/logo-on-16x16.png"
+    />
   </head>
   <body>
     <!--vue-ssr-outlet-->
