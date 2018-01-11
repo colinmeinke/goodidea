@@ -1,5 +1,5 @@
 import idb from 'idb'
-import { sortIdeas, sortCriterias } from './helpers'
+import { sortIdeas, sortCriterias } from '../common/helpers'
 
 const dbName = 'goodidea'
 const dbVersion = 2

@@ -1,5 +1,5 @@
 import compression from 'compression'
-import createApp from './create-app'
+import createApp from '../common/create-app'
 import { createRenderer } from 'vue-server-renderer'
 import express from 'express'
 import fs from 'fs'
@@ -27,13 +27,16 @@ server.get('/', (req, res) => {
     criteriaAdd: () => ({}),
     criteriaDelete: () => ({}),
     criterias: [],
+    hasIdeas: false,
     ideaAdd: () => ({}),
     ideaDelete: () => ({}),
     ideaScore: () => ({}),
     ideas: [],
+    showCriteria: false,
     upload: () => ({}),
     updateAvailable: false,
-    updateServiceWorker: () => ({})
+    updateServiceWorker: () => ({}),
+    updateShowCriteria: () => ({})
   })
 
   const context = {

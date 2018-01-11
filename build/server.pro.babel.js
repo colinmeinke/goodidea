@@ -10,7 +10,7 @@ const externals = fs
   .reduce((p, c) => ({ ...p, ...c }))
 
 module.exports = {
-  entry: './src/server.js',
+  entry: './src/server/index.js',
   output: {
     filename: 'server.js',
     path: path.resolve(__dirname, '..', 'dist')
@@ -19,14 +19,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader'
-      },
-      {
         test: /\.(js|vue)$/,
         loader: 'string-replace-loader',
         query: {
@@ -34,6 +26,14 @@ module.exports = {
           replace: 'false',
           flags: 'g'
         }
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader'
       }
     ]
   },

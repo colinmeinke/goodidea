@@ -12,3 +12,6 @@
     name: 'IdeaList'
   }
 </script>
+
+<style scoped>
+</style>

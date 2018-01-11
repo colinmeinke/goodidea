@@ -1,6 +1,6 @@
 <template>
   <li>
-    <h3>{{ idea.title }}</h3>
+    <h3 class="test">{{ idea.title }}</h3>
 
     <p v-if="idea.description">{{ idea.description }}</p>
 
@@ -74,3 +74,6 @@
     components: { ScoreForm }
   }
 </script>
+
+<style scoped>
+</style>

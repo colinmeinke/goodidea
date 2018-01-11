@@ -12,3 +12,6 @@
     name: 'CriteriaList'
   }
 </script>
+
+<style scoped>
+</style>

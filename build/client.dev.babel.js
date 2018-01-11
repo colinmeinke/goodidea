@@ -2,21 +2,13 @@ import path from 'path'
 import webpack from 'webpack'
 
 export default {
-  entry: './src/client.js',
+  entry: './src/client/index.js',
   output: {
     filename: 'client.js',
     path: path.resolve(__dirname, '..', 'static')
   },
   module: {
     rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader'
-      },
       {
         test: /\.(js|vue)$/,
         loader: 'string-replace-loader',
@@ -25,6 +17,14 @@ export default {
           replace: 'true',
           flags: 'g'
         }
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader'
       }
     ]
   },

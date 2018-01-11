@@ -77,11 +77,7 @@ const replaceInFiles = replaceData => Promise.all([
 fs.readdirAsync(iconsDir)
   .then(iconFiles => hashFiles(iconsDir, iconFiles))
   .then(replaceInFiles)
-  .then(() => hashFiles(staticDir, [
-    'client.js',
-    'manifest.json',
-    'manifest-on.json'
-  ]))
+  .then(() => hashFiles(staticDir, [ 'client.js', 'manifest.json' ]))
   .then(replaceInFiles)
   .then(() => console.log('Cache busting succeeded!'))
   .catch(err => console.error('Cache busting failed', err))

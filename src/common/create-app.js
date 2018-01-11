@@ -1,16 +1,22 @@
-import Home from './components/Home.vue'
 import Layout from './components/Layout.vue'
+import Main from './components/Main.vue'
 import Vue from 'vue'
 
 const createApp = (data = {}, el) => {
   const x = {
     data,
     template: `
-      <layout
+      <Layout
+        :criterias="criterias"
+        :hasIdeas="hasIdeas"
+        :ideas="ideas"
+        :showCriteria="showCriteria"
         :updateAvailable="updateAvailable"
         :updateServiceWorker="updateServiceWorker"
+        :updateShowCriteria="updateShowCriteria"
+        :upload="upload"
       >
-        <home
+        <Main
           :criteriaAdd="criteriaAdd"
           :criteriaDelete="criteriaDelete"
           :criterias="criterias"
@@ -18,12 +24,11 @@ const createApp = (data = {}, el) => {
           :ideaDelete="ideaDelete"
           :ideaScore="ideaScore"
           :ideas="ideas"
-          :upload="upload"
-        >
-        </home>
-      </layout>
+          :showCriteria="showCriteria"
+        />
+      </Layout>
     `,
-    components: { Home, Layout }
+    components: { Layout, Main }
   }
 
   if (el) {

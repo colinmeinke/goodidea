@@ -1,50 +1,36 @@
 <template>
   <form v-on:submit.prevent="submitHandler">
-    <h3>Add a new criteria</h3>
+    <h3>Add a new idea</h3>
 
-    <label for="criteria-title">
+    <label for="idea-title">
       Title
       <input
         type="text"
         name="title"
-        ref="criteriaAddTitle"
-        id="criteria-title"
+        ref="ideaAddTitle"
+        id="idea-title"
         v-model="title"
         v-on:change.prevent="changeHandler"
         v-on:keyup.prevent="changeHandler"
       />
     </label>
 
-    <label for="criteria-description">
+    <label for="idea-description">
       Description
       <textarea
         name="description"
-        id="criteria-description"
+        id="idea-description"
         v-model="description"
         v-on:change.prevent="changeHandler"
         v-on:keyup.prevent="changeHandler"
       /></textarea>
     </label>
 
-    <label for="criteria-weight">
-      Weight (between 1 and 10)
-      <input
-        type="number"
-        name="weight"
-        id="criteria-weight"
-        min="1"
-        max="10"
-        step="1"
-        v-model.number="weight"
-        v-on:change.prevent="changeHandler"
-      />
-    </label>
-
     <button
       type="submit"
       :disabled="disabled"
     >
-      Add new criteria
+      Add new idea
     </button>
   </form>
 </template>
@@ -53,15 +39,14 @@
   import shortid from 'shortid'
 
   export default {
-    name: 'CriteriaAddForm',
+    name: 'IdeaAddForm',
     data: () => ({
       title: '',
       description: '',
-      weight: 5,
       disabled: true
     }),
     props: {
-      criteriaAdd: {
+      ideaAdd: {
         type: Function,
         required: true
       }
@@ -71,36 +56,30 @@
         this.disabled = !this.validForm()
       },
       validForm: function () {
-        return this.validTitle(this.title) &&
-          this.validDescription(this.description) &&
-          this.validWeight(this.weight)
+        return this.validTitle(this.title) && this.validDescription(this.description)
       },
       validTitle: title => (
         typeof title === 'string' && title.trim().length
       ),
       validDescription: description => typeof description === 'string',
-      validWeight: weight => (
-        typeof weight === 'number' &&
-        weight % 1 === 0 &&
-        weight >= 1 &&
-        weight <= 10
-      ),
       submitHandler: function () {
         if (this.validForm()) {
-          this.criteriaAdd({
+          this.ideaAdd({
             id: shortid.generate(),
             created: Date.now(),
             title: this.title.trim(),
             description: this.description.trim(),
-            weight: this.weight
+            criteriaScores: {}
           })
 
           this.title = ''
           this.description = ''
-          this.weight = 5
-          this.$refs.criteriaAddTitle.focus()
+          this.$refs.ideaAddTitle.focus()
         }
       }
     }
   }
 </script>
+
+<style scoped>
+</style>

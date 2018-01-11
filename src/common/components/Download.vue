@@ -1,14 +1,13 @@
 <template>
   <div>
     <button type="button" v-on:click="download">
-      Download ideas to file
+      Download
     </button>
 
     <a
       :href="file"
       :download="fileName"
       ref="download"
-      style="display: none;"
     >
     </a>
   </div>
@@ -46,3 +45,9 @@
     }
   }
 </script>
+
+<style scoped>
+  a {
+    display: none;
+  }
+</style>

@@ -9,7 +9,7 @@ const externals = fs
   .reduce((p, c) => ({ ...p, ...c }))
 
 export default {
-  entry: './src/server.js',
+  entry: './src/server/index.js',
   output: {
     filename: 'server.js',
     path: path.resolve(__dirname, '..', 'dist')
@@ -18,14 +18,6 @@ export default {
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader'
-      },
-      {
         test: /\.(js|vue)$/,
         loader: 'string-replace-loader',
         query: {
@@ -33,6 +25,14 @@ export default {
           replace: 'true',
           flags: 'g'
         }
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader'
       }
     ]
   },

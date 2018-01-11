@@ -1,4 +1,4 @@
-import createApp from './create-app'
+import createApp from '../common/create-app'
 import initServiceWorker from './service-worker'
 import {
   open as openDb,
@@ -11,7 +11,7 @@ import {
   ideasClear as dbIdeasClear,
   ideasGet as dbIdeasGet
 } from './db'
-import { sortIdeas, sortCriterias } from './helpers'
+import { sortIdeas, sortCriterias } from '../common/helpers'
 
 const favicon16 = document.querySelector('link[rel="icon"][sizes="16x16"]')
 const favicon32 = document.querySelector('link[rel="icon"][sizes="32x32"]')
@@ -116,6 +116,7 @@ openDb()
 
       this.$root.ideas.push(idea)
       this.$root.ideas.sort(sortIdeas)
+      this.$root.hasIdeas = true
 
       dbIdeaAdd(db, idea)
         .then(() => console.log(`"${idea.title}" saved to your browser's local DB`))
@@ -131,6 +132,8 @@ openDb()
           break
         }
       }
+
+      this.$root.hasIdeas = this.$root.ideas.length > 1
 
       if (!this.$root.ideas.length) {
         iconsOff()
@@ -167,9 +170,20 @@ openDb()
         })
     }
 
+    const updateShowCriteria = function (showCriteria) {
+      this.$root.showCriteria = showCriteria
+    }
+
     const upload = function ({ ideas, criterias }) {
       this.$root.ideas = ideas
       this.$root.criterias = criterias
+
+      if (ideas.length) {
+        this.$root.hasIdeas = true
+        iconsOn()
+      } else {
+        this.$root.hasIdeas = false
+      }
 
       Promise.all([ dbIdeasClear(db), dbCriteriaClear(db) ])
         .then(() => Promise.all(
@@ -189,13 +203,16 @@ openDb()
       criteriaAdd,
       criteriaDelete,
       criterias: [],
+      hasIdeas: false,
       ideaAdd,
       ideaDelete,
       ideaScore,
       ideas: [],
+      showCriteria: false,
       upload,
       updateAvailable: false,
-      updateServiceWorker: worker => worker.postMessage({ action: 'skipWaiting' })
+      updateServiceWorker: worker => worker.postMessage({ action: 'skipWaiting' }),
+      updateShowCriteria
     }
 
     const app = createApp(state, '#app')
@@ -206,7 +223,10 @@ openDb()
         state.criterias = criterias
 
         if (ideas.length) {
+          state.hasIdeas = true
           iconsOn()
+        } else {
+          state.hasIdeas = false
         }
       })
       .catch(err => {

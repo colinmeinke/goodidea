@@ -1,7 +1,7 @@
 <template>
   <form enctype="multipart/form-data">
     <label for="upload">
-      Upload ideas from file
+      Upload
       <input
         id="upload"
         name="upload"
@@ -153,3 +153,6 @@
     }
   }
 </script>
+
+<style scoped>
+</style>

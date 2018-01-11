@@ -83,3 +83,6 @@
     components: { ScoreFormField }
   }
 </script>
+
+<style scoped>
+</style>

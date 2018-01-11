@@ -10,7 +10,11 @@ self.addEventListener('install', event => {
         '/manifest.json',
         '/client.js',
         '/icons/logo-16x16.png',
-        '/icons/logo-32x32.png'
+        '/icons/logo-on-16x16.png',
+        '/icons/logo-32x32.png',
+        '/icons/logo-on-32x32.png',
+        '/icons/logo.svg',
+        '/icons/logo-on.svg'
       ]))
   )
 })
